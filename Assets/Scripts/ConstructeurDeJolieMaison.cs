@@ -10,28 +10,16 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
     public Building building;
     private MeshFilter meshFilter;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        meshFilter = GetComponent<MeshFilter>();
-
-        Building build = new Building();
-        build.points = new List<Vector3> { new Vector3(0, 0, 0), new Vector3(2, 0, 0), new Vector3(2, 0, 2), new Vector3(1, 0, 2), new Vector3(1, 0, 1), new Vector3(0, 0, 1) };
-        build.height = 5; 
-        building = build;
-
-        Construct();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Construct()
     {
+        for(int i = 0; i < building.points.Count; i++)
+        {
+            building.points[i] = new Vector2(building.points[i].x / 1000.0f, building.points[i].y / 1000.0f); 
+        }
+        building.height = building.height / 1000.0f;
+
+        meshFilter = GetComponent<MeshFilter>();
+
         Mesh msh = new Mesh();
         List<int> triangles = new List<int>();
 
@@ -39,22 +27,33 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         Vector3 center = new Vector3();
         for (int i = 0; i < building.points.Count; i++)
         {
-            center += building.points[i];
+            center += new Vector3(building.points[i].x, building.height, building.points[i].y);
         }
         center /= building.points.Count;
         Vector3 centerfaceHaut = new Vector3(center.x, center.y + building.height, center.z);
-        building.points.Insert(0, center);
-        building.points.Insert(1, centerfaceHaut);
+        building.points.Insert(0, new Vector2(center.x, center.z));
+        building.points.Insert(1, new Vector2(centerfaceHaut.x, centerfaceHaut.z));
 
         //vertices claqués au sol
         List<Vector3> vert = new List<Vector3>();
-        vert.InsertRange(0, building.points);
+        for (int i = 0; i < building.points.Count; i++)
+        {
+            if (i == 1)
+            {
+                vert.Add(new Vector3(centerfaceHaut.x, building.height, centerfaceHaut.z));
+            }
+            else
+            {
+                vert.Add(new Vector3(building.points[i].x, 0, building.points[i].y));
+            }
+        }
+       
 
 
         //vertices en l'air
         for (int i = 0; i < building.points.Count; i++)
         {
-            vert.Add(new Vector3(building.points[i].x, building.points[i].y + building.height, building.points[i].z));
+            vert.Add(new Vector3(building.points[i].x, building.height, building.points[i].y));
         }
         msh.vertices = vert.ToArray();
 
@@ -115,5 +114,7 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         msh.triangles = triangles.ToArray();
         GetComponent<MeshRenderer>().material = mat;
         meshFilter.mesh = msh;
+
+        Debug.Log(building.points[0].x);
     }
 }
