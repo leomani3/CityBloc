@@ -9,14 +9,15 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
     public Material mat;
     public Building building;
     private MeshFilter meshFilter;
+    public Vector2 cityCenter;
 
     public void Construct()
     {
         for(int i = 0; i < building.points.Count; i++)
         {
-            building.points[i] = new Vector2(building.points[i].x / 1000.0f, building.points[i].y / 1000.0f); 
+            building.points[i] = new Vector2((building.points[i].x -cityCenter.x) / 10000, (building.points[i].y - cityCenter.y) / 10000); 
         }
-        building.height = building.height / 1000.0f;
+        building.height = building.height / 10000.0f;
 
         meshFilter = GetComponent<MeshFilter>();
 
@@ -73,48 +74,48 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         for (int i = 2; i < building.points.Count-1; i++)
         {
             triangles.Add(i);
-            triangles.Add(0);
             triangles.Add(i+1);
+            triangles.Add(0);
         }
         triangles.Add(building.points.Count - 1);
-        triangles.Add(0);
         triangles.Add(2);
+        triangles.Add(0);
 
         //faces latéralles
         for (int i = 2; i < building.points.Count - 1; i++)
         {
             triangles.Add(i);
-            triangles.Add(i + building.points.Count);
             triangles.Add(i + 1);
+            triangles.Add(i + building.points.Count);
 
             triangles.Add(i + 1);
-            triangles.Add(i + building.points.Count);
             triangles.Add(i + building.points.Count + 1);
+            triangles.Add(i + building.points.Count);
         }
         triangles.Add(building.points.Count -1);
-        triangles.Add(vert.Count - 1);
         triangles.Add(2);
+        triangles.Add(vert.Count - 1);
 
         triangles.Add(2);
-        triangles.Add(vert.Count - 1);
         triangles.Add(building.points.Count + 2);
+        triangles.Add(vert.Count - 1);
 
 
         //face du haut
         for (int i = 2; i < building.points.Count - 1; i++)
         {
             triangles.Add(i + building.points.Count);
-            triangles.Add(1);
             triangles.Add(i + 1 + building.points.Count);
+            triangles.Add(1);
         }
         triangles.Add(vert.Count - 1);
-        triangles.Add(1);
         triangles.Add(2 + building.points.Count);
+        triangles.Add(1);
 
         msh.triangles = triangles.ToArray();
         GetComponent<MeshRenderer>().material = mat;
         meshFilter.mesh = msh;
 
-        Debug.Log(building.points[0].x);
+        //Debug.Log(building.points[0].x);
     }
 }
