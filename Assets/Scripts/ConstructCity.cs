@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class ConstructCity : MonoBehaviour
 {
-    // Start is called before the first frame update
     List<Building> city;
     public ConstructeurDeJolieMaison gerard;
     void Start()
     {
-        city = Parser.GetBuildingsFromJSON("./Scripts/Bati_JSON_RGF93.geojson");
+        city = Parser.GetBuildingsFromJSON("./Scripts/Campus_Bron_RGF93_GeoJson.geojson");
         
         for (int i = 0; i < city.Count; i++)
         {
@@ -19,11 +18,5 @@ public class ConstructCity : MonoBehaviour
             //Debug.Log(gerardInstancier.building.points[0].x);
             gerardInstancier.Construct();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

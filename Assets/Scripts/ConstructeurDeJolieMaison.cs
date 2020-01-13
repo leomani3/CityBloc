@@ -23,20 +23,9 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         Mesh msh = new Mesh();
         List<int> triangles = new List<int>();
 
-        //calcul du centre du batiment
-        Vector3 center = new Vector3();
-        for (int i = 0; i < building.points.Count; i++)
-        {
-            center += new Vector3(building.points[i].x, building.height, building.points[i].y);
-        }
-        center /= building.points.Count;
-        Vector3 centerfaceHaut = new Vector3(center.x, center.y + building.height, center.z);
-        building.points.Insert(0, new Vector2(center.x, center.z));
-        building.points.Insert(1, new Vector2(centerfaceHaut.x, centerfaceHaut.z));
-
         //vertices claqués au sol
         List<Vector3> vert = new List<Vector3>();
-        for (int i = 0; i < building.points.Count; i++)
+        /*for (int i = 0; i < building.points.Count; i++)
         {
             if (i == 1)
             {
@@ -46,75 +35,71 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
             {
                 vert.Add(new Vector3(building.points[i].x, 0, building.points[i].y));
             }
+        }*/
+
+
+        //vertices en bas
+        for (int i = 0; i < building.points.Count; i++)
+        {
+            vert.Add(new Vector3(building.points[i].x, 0, building.points[i].y));
         }
-       
-
-
         //vertices en l'air
         for (int i = 0; i < building.points.Count; i++)
         {
             vert.Add(new Vector3(building.points[i].x, building.height, building.points[i].y));
         }
+
         msh.vertices = vert.ToArray();
 
-
-        /*List<Vector3> blbl = new List<Vector3>();
-        blbl.Add(new Vector3(0, 0, 0));
-        blbl.Add(new Vector3(1, 0, 0));
-        blbl.Add(new Vector3(0, 0, 1));
-        msh.vertices = blbl.ToArray();*/
-
-        //triangles
-        /*triangles.Add(0);
-        triangles.Add(1);
-        triangles.Add(2);*/
-
-        //face du bas
-        for (int i = 2; i < building.points.Count-1; i++)
+        //tesselation de la face du bas
+        List<double> testBas = new List<double>();
+        int sizeBAs = 0;
+        for (int i = 0; i < vert.Count/2; i++)
         {
-            triangles.Add(i);
-            triangles.Add(0);
-            triangles.Add(i+1);
+            testBas.Add(vert[sizeBAs].x);
+            testBas.Add(vert[sizeBAs].z);
+            sizeBAs++;
         }
-        triangles.Add(building.points.Count - 1);
-        triangles.Add(0);
-        triangles.Add(2);
+        List<int> tessalationBas = EarcutNet.earcut.Tessellate(testBas.ToArray(), new int[] { });
+        triangles.InsertRange(0, tessalationBas);
+        
+        //tesselation de la face du haut
+        List<double> test = new List<double>();
+        int size = building.points.Count * 2;
+        for (int i = 0; i < vert.Count / 2; i++)
+        {
+            test.Add(vert[size-1].x);
+            test.Add(vert[size-1].z);
+            size--;
+        }
+        List<int> tessalationHaut = EarcutNet.earcut.Tessellate(test.ToArray(), new int[] { });
+        for (int i = 0; i < tessalationHaut.Count; i++)
+        {
+            tessalationHaut[i] = tessalationHaut[i] + building.points.Count;//mise a niveau pour les indices car la tesselation n'a pas tout le tab sinon il ferait une seul face 
+        }                                                                   //avec la face du haut et du bas
+        triangles.InsertRange(triangles.Count, tessalationHaut);
 
         //faces latéralles
-        for (int i = 2; i < building.points.Count - 1; i++)
-        {
-            triangles.Add(i);
-            triangles.Add(i + building.points.Count);
-            triangles.Add(i + 1);
+         for (int i = 0; i < building.points.Count - 1; i++)
+         {
+             triangles.Add(i);
+             triangles.Add(i + 1);
+             triangles.Add(i + building.points.Count);
 
-            triangles.Add(i + 1);
+             triangles.Add(i + 1);
+             triangles.Add(i + building.points.Count + 1);
             triangles.Add(i + building.points.Count);
-            triangles.Add(i + building.points.Count + 1);
         }
         triangles.Add(building.points.Count -1);
+        triangles.Add(0);
         triangles.Add(vert.Count - 1);
-        triangles.Add(2);
 
-        triangles.Add(2);
-        triangles.Add(vert.Count - 1);
+        triangles.Add(0);
         triangles.Add(building.points.Count + 2);
-
-
-        //face du haut
-        for (int i = 2; i < building.points.Count - 1; i++)
-        {
-            triangles.Add(i + building.points.Count);
-            triangles.Add(1);
-            triangles.Add(i + 1 + building.points.Count);
-        }
         triangles.Add(vert.Count - 1);
-        triangles.Add(1);
-        triangles.Add(2 + building.points.Count);
 
         msh.triangles = triangles.ToArray();
         GetComponent<MeshRenderer>().material = mat;
         meshFilter.mesh = msh;
-
-        Debug.Log(building.points[0].x);
     }
 }
