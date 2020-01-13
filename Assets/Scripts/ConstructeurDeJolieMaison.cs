@@ -9,14 +9,15 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
     public Material mat;
     public Building building;
     private MeshFilter meshFilter;
+    public Vector2 cityCenter;
 
     public void Construct()
     {
         for(int i = 0; i < building.points.Count; i++)
         {
-            building.points[i] = new Vector2(building.points[i].x / 1000.0f, building.points[i].y / 1000.0f); 
+            building.points[i] = new Vector2((building.points[i].x -cityCenter.x) / 10000, (building.points[i].y - cityCenter.y) / 10000); 
         }
-        building.height = building.height / 1000.0f;
+        building.height = building.height / 10000.0f;
 
         meshFilter = GetComponent<MeshFilter>();
 

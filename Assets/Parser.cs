@@ -8,7 +8,7 @@ public class Parser
 {
     public static List<Building> GetBuildingsFromJSON(string path)
     {
-        JObject encodedBuilding = JObject.Parse(File.ReadAllText(Application.dataPath + "/Scripts/Campus_Bron_RGF93_GeoJson.geojson"));
+        JObject encodedBuilding = JObject.Parse(File.ReadAllText(path));
         JArray features = (JArray) encodedBuilding["features"];
 
         List<Building> buildings = new List<Building>();
