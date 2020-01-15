@@ -6,6 +6,7 @@ public class ConstructCity : MonoBehaviour
 {
     List<Building> city;
     public ConstructeurDeJolieMaison gerard;
+    public string path;
     void Start()
     {
         city = Parser.GetBuildingsFromJSON("./Assets/Scripts/Campus_Bron_RGF93_GeoJson.geojson");
