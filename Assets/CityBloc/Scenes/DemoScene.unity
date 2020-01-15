@@ -452,5 +452,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3768378899262294031, guid: 10071922b36e7f74f80eb5c6c65969b5,
+        type: 3}
+      propertyPath: path
+      value: ./Assets/CityBloc/Scripts/Campus_Bron_RGF93_GeoJson.geojson
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10071922b36e7f74f80eb5c6c65969b5, type: 3}
