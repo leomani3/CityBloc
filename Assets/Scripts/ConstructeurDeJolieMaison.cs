@@ -26,18 +26,6 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
 
         //vertices claqués au sol
         List<Vector3> vert = new List<Vector3>();
-        /*for (int i = 0; i < building.points.Count; i++)
-        {
-            if (i == 1)
-            {
-                vert.Add(new Vector3(centerfaceHaut.x, building.height, centerfaceHaut.z));
-            }
-            else
-            {
-                vert.Add(new Vector3(building.points[i].x, 0, building.points[i].y));
-            }
-        }*/
-
 
         //vertices en bas
         for (int i = 0; i < building.points.Count; i++)
