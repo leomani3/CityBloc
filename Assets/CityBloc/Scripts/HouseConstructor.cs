@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConstructeurDeJolieMaison : MonoBehaviour
+public class HouseConstructor : MonoBehaviour
 {
     public List<Vector3> coordinates;
 
@@ -13,9 +13,9 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
 
     public void Construct()
     {
-        for(int i = 0; i < building.points.Count; i++)
+        for (int i = 0; i < building.points.Count; i++)
         {
-            building.points[i] = new Vector2((building.points[i].x -cityCenter.x) / 10000, (building.points[i].y - cityCenter.y) / 10000); 
+            building.points[i] = new Vector2((building.points[i].x - cityCenter.x) / 10000, (building.points[i].y - cityCenter.y) / 10000);
         }
         building.height = building.height / 10000.0f;
 
@@ -43,7 +43,7 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         //tesselation de la face du bas
         List<double> testBas = new List<double>();
         int sizeBAs = 0;
-        for (int i = 0; i < vert.Count/2; i++)
+        for (int i = 0; i < vert.Count / 2; i++)
         {
             testBas.Add(vert[sizeBAs].x);
             testBas.Add(vert[sizeBAs].z);
@@ -51,14 +51,14 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         }
         List<int> tessalationBas = EarcutNet.earcut.Tessellate(testBas.ToArray(), new int[] { });
         triangles.InsertRange(0, tessalationBas);
-        
+
         //tesselation de la face du haut
         List<double> test = new List<double>();
         int size = building.points.Count * 2;
         for (int i = 0; i < vert.Count / 2; i++)
         {
-            test.Add(vert[size-1].x);
-            test.Add(vert[size-1].z);
+            test.Add(vert[size - 1].x);
+            test.Add(vert[size - 1].z);
             size--;
         }
         List<int> tessalationHaut = EarcutNet.earcut.Tessellate(test.ToArray(), new int[] { });
@@ -69,17 +69,17 @@ public class ConstructeurDeJolieMaison : MonoBehaviour
         triangles.InsertRange(triangles.Count, tessalationHaut);
 
         //faces latéralles
-         for (int i = 0; i < building.points.Count - 1; i++)
-         {
-             triangles.Add(i);
-             triangles.Add(i + 1);
-             triangles.Add(i + building.points.Count);
+        for (int i = 0; i < building.points.Count - 1; i++)
+        {
+            triangles.Add(i);
+            triangles.Add(i + 1);
+            triangles.Add(i + building.points.Count);
 
-             triangles.Add(i + 1);
-             triangles.Add(i + building.points.Count + 1);
+            triangles.Add(i + 1);
+            triangles.Add(i + building.points.Count + 1);
             triangles.Add(i + building.points.Count);
         }
-        triangles.Add(building.points.Count -1);
+        triangles.Add(building.points.Count - 1);
         triangles.Add(0);
         triangles.Add(vert.Count - 1);
 

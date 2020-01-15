@@ -5,11 +5,11 @@ using UnityEngine;
 public class ConstructCity : MonoBehaviour
 {
     List<Building> city;
-    public ConstructeurDeJolieMaison gerard;
+    public HouseConstructor houseConstructorPrefab;
     public string path;
     void Start()
     {
-        city = Parser.GetBuildingsFromJSON("./Assets/Scripts/Campus_Bron_RGF93_GeoJson.geojson");
+        city = Parser.GetBuildingsFromJSON(path);
 
         Vector2 cityCenter = new Vector2();
         int nb = 0;
@@ -23,15 +23,15 @@ public class ConstructCity : MonoBehaviour
         }
         cityCenter /= nb;
 
-        
+
         for (int i = 0; i < city.Count; i++)
         {
             //Debug.Log(city[i].points[0].x);
-            ConstructeurDeJolieMaison gerardInstancier = Instantiate(gerard, new Vector3((city[i].points[0].x - cityCenter.x) / 10000, 0, (city[i].points[0].y - cityCenter.y) / 10000), Quaternion.identity);
-            gerardInstancier.building = city[i];
-            gerardInstancier.cityCenter = cityCenter;
+            HouseConstructor house = Instantiate(houseConstructorPrefab, new Vector3((city[i].points[0].x - cityCenter.x) / 10000, 0, (city[i].points[0].y - cityCenter.y) / 10000), Quaternion.identity);
+            house.building = city[i];
+            house.cityCenter = cityCenter;
             //Debug.Log(gerardInstancier.building.points[0].x);
-            gerardInstancier.Construct();
+            house.Construct();
         }
     }
 }

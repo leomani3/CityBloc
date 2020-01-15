@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Leo.unity
+    path: Assets/CityBloc/Scenes/DemoScene.unity
     guid: 6c77f71764afd074792758380f0dbc1a
   m_configObjects: {}
