@@ -9,7 +9,7 @@ public class ConstructCity : MonoBehaviour
     public string path;
     void Start()
     {
-        city = Parser.GetBuildingsFromJSON(path);
+        city = Parser.GetBuildingsFromJSON(Application.dataPath + path);
 
         Vector2 cityCenter = new Vector2();
         int nb = 0;
